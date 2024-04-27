@@ -100,7 +100,11 @@ namespace Us.Ochlocracy.Model
         /// <summary>
         /// An error stemming from the congress api.
         /// </summary>
-        CongressAPI
+        CongressAPI,
+        /// <summary>
+        /// An error stemming from the OchlocracyAPI.
+        /// </summary>
+        OchlocracyAPI
     }
 
     /// <summary>

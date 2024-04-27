@@ -98,4 +98,3 @@ namespace Us.Ochlocracy.Model.Members
     }
 }
 
-}

@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Us.Ochlocracy.Model\Us.Ochlocracy.Model.csproj" />
-    <ProjectReference Include="..\Us.Propublica.Proxy\Us.Propublica.Proxy.csproj" />
     <ProjectReference Include="..\Us.Proxy.Common\Us.Proxy.Common.csproj" />
   </ItemGroup>
 
