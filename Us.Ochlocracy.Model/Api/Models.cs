@@ -6,6 +6,7 @@ using Us.Ochlocracy.Model.Constants;
 
 namespace Us.Ochlocracy.Model.Api
 {
+    /// <summary>
     /// A common class to describe problem details.
     /// </summary>
     public class ProblemDetails : Microsoft.AspNetCore.Mvc.ProblemDetails

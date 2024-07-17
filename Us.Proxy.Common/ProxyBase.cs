@@ -16,78 +16,78 @@ namespace Us.Proxy.Common
 {
     public class ProxyBase
     {
-        private const string IdentifierHeader = "identifier";
-        readonly ILogger log;
-        readonly string baseUrl;
-        readonly JsonDeserializer deserializer;
-        readonly IHttpCallLogger httpCallLogger = new NullHttpCallLogger();
-        protected readonly HttpClient httpClient;
-        protected readonly ErrorSource errorSource = ErrorSource.Unspecified;
+        private const string IDENTIFIER_HEADER = "identifier";
+        private readonly ILogger log;
+        private readonly string baseUrl;
+        private readonly JsonDeserializer deserializer;
+        private readonly IHttpCallLogger httpCallLogger = new NullHttpCallLogger();
+        protected readonly HttpClient HttpClient;
+        protected readonly ErrorSource ErrorSource = ErrorSource.Unspecified;
 
-        public ProxyBase(HttpClient httpClient, string baseUrl, ErrorSource errorSource, IHttpCallLogger httpCallLogger, ILogger log)
+        protected ProxyBase(HttpClient httpClient, string baseUrl, ErrorSource errorSource, IHttpCallLogger httpCallLogger, ILogger log)
         {
-            this.httpClient = httpClient;
+            this.HttpClient = httpClient;
             this.baseUrl = baseUrl.IsEmpty()
                 ? httpClient.BaseAddress != null
                     ? httpClient.BaseAddress.ToString()
                     : ""
                 : baseUrl;
 
-            this.errorSource = errorSource;
+            this.ErrorSource = errorSource;
             this.httpCallLogger = httpCallLogger;
             this.log = log;
             deserializer = new JsonDeserializer(log, errorSource);
         }
 
 
-        protected EitherAsync<Error, O> Get<O>(string route, CancellationToken cancellationToken = default) =>
-            GetAsync<O>(route, cancellationToken).ToAsync();
+        protected EitherAsync<Error, TO> Get<TO>(string route, CancellationToken cancellationToken = default) =>
+            GetAsync<TO>(route, cancellationToken).ToAsync();
 
-        protected EitherAsync<Error, Option<O>> GetOption<O>(string route, CancellationToken cancellationToken = default) =>
-            GetOptionAsync<O>(route, cancellationToken).ToAsync();
+        protected EitherAsync<Error, Option<TO>> GetOption<TO>(string route, CancellationToken cancellationToken = default) =>
+            GetOptionAsync<TO>(route, cancellationToken).ToAsync();
 
-        protected EitherAsync<Error, O> Post<I, O>(string route, HttpContent json, CancellationToken cancellationToken = default) =>
-            PostAsync<I, O>(route, json, cancellationToken).ToAsync();
+        protected EitherAsync<Error, TO> Post<TI, TO>(string route, HttpContent json, CancellationToken cancellationToken = default) =>
+            PostAsync<TI, TO>(route, json, cancellationToken).ToAsync();
 
-        protected EitherAsync<Error, O> Put<I, O>(string route, HttpContent json, CancellationToken cancellationToken = default) =>
-            PutAsync<I, O>(route, json, cancellationToken).ToAsync();
+        protected EitherAsync<Error, TO> Put<TI, TO>(string route, HttpContent json, CancellationToken cancellationToken = default) =>
+            PutAsync<TI, TO>(route, json, cancellationToken).ToAsync();
 
-        protected EitherAsync<Error, O> Delete<O>(string route, CancellationToken cancellationToken = default) =>
-            DeleteAsync<O>(route, cancellationToken).ToAsync();
+        protected EitherAsync<Error, TO> Delete<TO>(string route, CancellationToken cancellationToken = default) =>
+            DeleteAsync<TO>(route, cancellationToken).ToAsync();
 
         protected EitherAsync<Error, FileResponse> GetFileResponse(string route, CancellationToken cancellationToken = default) =>
             GetFileResponseAsync(route, cancellationToken).ToAsync();
 
 
-        protected async Task<Either<Error, O>> GetAsync<O>(string route, CancellationToken cancellationToken = default) =>
-            await ProcessAsync<O>(c => c.GetAsync(BuildUrl(baseUrl, route, HttpMethod.Get), cancellationToken), cancellationToken);
+        protected async Task<Either<Error, TO>> GetAsync<TO>(string route, CancellationToken cancellationToken = default) =>
+            await ProcessAsync<TO>(c => c.GetAsync(BuildUrl(baseUrl, route, HttpMethod.Get), cancellationToken), cancellationToken);
 
-        protected async Task<Either<Error, O>> GetAsync<O>(string route,
-            Func<HttpResponseMessage, string, ILogger, Either<Error, O>> toResultOrError,
+        protected async Task<Either<Error, TO>> GetAsync<TO>(string route,
+            Func<HttpResponseMessage, string, ILogger, Either<Error, TO>> toResultOrError,
             CancellationToken cancellationToken = default) =>
-            await ProcessHttpCallAsync(c => c.GetAsync(BuildUrl(baseUrl, route, HttpMethod.Get)), (c, s) => toResultOrError(c, s, log), cancellationToken);
+            await ProcessHttpCallAsync(c => c.GetAsync(BuildUrl(baseUrl, route, HttpMethod.Get), cancellationToken), (c, s) => toResultOrError(c, s, log), cancellationToken);
 
-        protected async Task<Either<Error, Option<O>>> GetOptionAsync<O>(string route, CancellationToken cancellationToken = default) =>
-            await ProcessOptionAsync<O>(c => c.GetAsync(BuildUrl(baseUrl, route, HttpMethod.Get), cancellationToken), cancellationToken);
+        protected async Task<Either<Error, Option<TO>>> GetOptionAsync<TO>(string route, CancellationToken cancellationToken = default) =>
+            await ProcessOptionAsync<TO>(c => c.GetAsync(BuildUrl(baseUrl, route, HttpMethod.Get), cancellationToken), cancellationToken);
 
-        protected async Task<Either<Error, O>> PostAsync<I, O>(string route, HttpContent json, CancellationToken cancellationToken = default) =>
-            await ProcessAsync<O>(c => c.PostAsync(BuildUrl(baseUrl, route, HttpMethod.Post), json, cancellationToken), cancellationToken);
+        protected async Task<Either<Error, TO>> PostAsync<TI, TO>(string route, HttpContent json, CancellationToken cancellationToken = default) =>
+            await ProcessAsync<TO>(c => c.PostAsync(BuildUrl(baseUrl, route, HttpMethod.Post), json, cancellationToken), cancellationToken);
 
-        protected async Task<Either<Error, O>> PutAsync<I, O>(string route, HttpContent json, CancellationToken cancellationToken = default) =>
-            await ProcessAsync<O>(c => c.PutAsync(BuildUrl(baseUrl, route, HttpMethod.Put), json, cancellationToken), cancellationToken);
+        protected async Task<Either<Error, TO>> PutAsync<TI, TO>(string route, HttpContent json, CancellationToken cancellationToken = default) =>
+            await ProcessAsync<TO>(c => c.PutAsync(BuildUrl(baseUrl, route, HttpMethod.Put), json, cancellationToken), cancellationToken);
 
-        protected async Task<Either<Error, O>> DeleteAsync<O>(string route, CancellationToken cancellationToken = default) =>
-            await ProcessAsync<O>(c => c.DeleteAsync(BuildUrl(baseUrl, route, HttpMethod.Delete), cancellationToken), cancellationToken);
+        protected async Task<Either<Error, TO>> DeleteAsync<TO>(string route, CancellationToken cancellationToken = default) =>
+            await ProcessAsync<TO>(c => c.DeleteAsync(BuildUrl(baseUrl, route, HttpMethod.Delete), cancellationToken), cancellationToken);
 
         protected async Task<Either<Error, FileResponse>> GetFileResponseAsync(string route, CancellationToken cancellationToken = default) =>
             await ProcessFileResponseAsync(c => c.GetAsync(BuildUrl(baseUrl, route, HttpMethod.Get), cancellationToken), cancellationToken);
 
 
-        protected async Task<Either<Error, R>> ProcessAsync<R>(Func<HttpClient, Task<HttpResponseMessage>> httpCall, CancellationToken cancellationToken = default) =>
-            await ProcessHttpCallAsync(httpCall, (response, content) => ToResultOrError<R>(response, content), cancellationToken);
+        protected async Task<Either<Error, TR>> ProcessAsync<TR>(Func<HttpClient, Task<HttpResponseMessage>> httpCall, CancellationToken cancellationToken = default) =>
+            await ProcessHttpCallAsync(httpCall, ToResultOrError<TR>, cancellationToken);
 
-        protected async Task<Either<Error, Option<R>>> ProcessOptionAsync<R>(Func<HttpClient, Task<HttpResponseMessage>> httpCall, CancellationToken cancellationToken = default) =>
-            await ProcessHttpCallAsync(httpCall, (response, content) => ToOptionResultOrError<R>(response, content), cancellationToken);
+        protected async Task<Either<Error, Option<TR>>> ProcessOptionAsync<TR>(Func<HttpClient, Task<HttpResponseMessage>> httpCall, CancellationToken cancellationToken = default) =>
+            await ProcessHttpCallAsync(httpCall, ToOptionResultOrError<TR>, cancellationToken);
 
         protected async Task<Either<Error, FileResponse>> ProcessFileResponseAsync(Func<HttpClient, Task<HttpResponseMessage>> httpCall,
             CancellationToken cancellationToken = default) =>
@@ -96,47 +96,45 @@ namespace Us.Proxy.Common
 
         private async Task<Either<Error, FileResponse>> ToFileOrError(HttpResponseMessage response) =>
             response.IsSuccessStatusCode
-                ? response.Content != null
-                    ? new FileResponse
-                    {
-                        FileName = response.Content.Headers?.ContentDisposition?.FileName ?? "",
-                        ContentAsBytes = await response.Content.ReadAsByteArrayAsync()
-                    }
-                    : FileResponse.Empty()
+                ? new FileResponse
+                {
+                    FileName = response.Content.Headers?.ContentDisposition?.FileName ?? "",
+                    ContentAsBytes = await response.Content.ReadAsByteArrayAsync()
+                }
                 : ToError(response,
-                    () => LogAsWarning(log, errorSource, response, $"Error return in {nameof(ToFileOrError)} for expected {typeof(FileResponse)}."));
+                    () => LogAsWarning(log, ErrorSource, response, $"Error return in {nameof(ToFileOrError)} for expected {typeof(FileResponse)}."));
 
-        private Either<Error, R> ToResultOrError<R>(HttpResponseMessage response, string? content) =>
+        private Either<Error, TR> ToResultOrError<TR>(HttpResponseMessage response, string? content) =>
             response.IsSuccessStatusCode
-                ? deserializer.As<R>(content)
+                ? deserializer.As<TR>(content)
                 : ToError(response,
-                    () => LogAsWarning(log, errorSource, response, $"Error return in {nameof(ToResultOrError)} for expected {typeof(R)}. Content: '{content}'"));
+                    () => LogAsWarning(log, ErrorSource, response, $"Error return in {nameof(ToResultOrError)} for expected {typeof(TR)}. Content: '{content}'"));
 
-        private Either<Error, Option<R>> ToOptionResultOrError<R>(HttpResponseMessage response, string? content)
+        private Either<Error, Option<TR>> ToOptionResultOrError<TR>(HttpResponseMessage response, string? content)
         {
             if (response.IsSuccessStatusCode)
-                return deserializer.AsOption<R>(content);
+                return deserializer.AsOption<TR>(content);
 
             if (response.StatusCode == HttpStatusCode.NotFound)
-                return Option<R>.None;
+                return Option<TR>.None;
 
             return ToError(response,
-                () => LogAsWarning(log, errorSource, response, $"Error return in {nameof(ToOptionResultOrError)} for expected {typeof(R)}. Content: '{content}'"));
+                () => LogAsWarning(log, ErrorSource, response, $"Error return in {nameof(ToOptionResultOrError)} for expected {typeof(TR)}. Content: '{content}'"));
         }
 
 
         /// <summary>
         /// Processes an HTTP call specified by <paramref name="httpCall"/> lambda, logs it, and converts response message content to 
-        /// either expected result <typeparamref name="R"/> or <see cref="Error"/>  depending on the outcome of the call.
+        /// either expected result <typeparamref name="TR"/> or <see cref="Error"/>  depending on the outcome of the call.
         /// </summary>
-        /// <typeparam name="R">Result type expected from from an HTTP call.</typeparam>
-        /// <param name="httpCall">Lambda representing a actual HTTP call to be performed that takes <see cref="HttpClient"/> and returns <see cref="Task"/> or <see cref="HttpResponseMessage"/>.</param>
-        /// <param name="respond">Result converter from content provided by <see cref="HttpResponseMessage"/> to expected type <typeparamref name="R"/> or <see cref="Error"/>.</param>
-        /// <param name="cancellationToken">The cancelation token that cancels the operation.</param>
-        /// <returns>Returns either expected result <typeparamref name="R"/> or <see cref="Error"/> depending on the outcome of the call.</returns>
-        private async Task<Either<Error, R>> ProcessHttpCallAsync<R>(
+        /// <typeparam name="TR">Result type expected from an HTTP call.</typeparam>
+        /// <param name="httpCall">Lambda representing a actual HTTP call to be performed that takes <see cref="System.Net.Http.HttpClient"/> and returns <see cref="Task"/> or <see cref="HttpResponseMessage"/>.</param>
+        /// <param name="respond">Result converter from content provided by <see cref="HttpResponseMessage"/> to expected type <typeparamref name="TR"/> or <see cref="Error"/>.</param>
+        /// <param name="cancellationToken">The cancellation token that cancels the operation.</param>
+        /// <returns>Returns either expected result <typeparamref name="TR"/> or <see cref="Error"/> depending on the outcome of the call.</returns>
+        private async Task<Either<Error, TR>> ProcessHttpCallAsync<TR>(
             Func<HttpClient, Task<HttpResponseMessage>> httpCall,
-            Func<HttpResponseMessage, string?, Either<Error, R>> respond,
+            Func<HttpResponseMessage, string?, Either<Error, TR>> respond,
             CancellationToken cancellationToken = default)
             => await TryHttp(async () =>
             {
@@ -155,9 +153,9 @@ namespace Us.Proxy.Common
         /// Processes an HTTP call specified by <paramref name="httpCall"/> lambda, logs it, and converts response <see cref="FileResponse"/> 
         /// or <see cref="Error"/> depending on the outcome of the call.
         /// </summary>
-        /// <param name="httpCall">Lambda representing a actual HTTP call to be performed that takes <see cref="HttpClient"/> and returns <see cref="Task"/> or <see cref="HttpResponseMessage"/>.</param>
+        /// <param name="httpCall">Lambda representing a actual HTTP call to be performed that takes <see cref="System.Net.Http.HttpClient"/> and returns <see cref="Task"/> or <see cref="HttpResponseMessage"/>.</param>
         /// <param name="respond">Result converter from content provided by <see cref="HttpResponseMessage"/> to <see cref="FileResponse"/> or <see cref="Error"/>.</param>
-        /// <param name="cancellationToken">The cancelation token that cancels the operation.</param>
+        /// <param name="cancellationToken">The cancellation token that cancels the operation.</param>
         /// <returns>Returns either <see cref="FileResponse"/> or <see cref="Error"/> depending on the outcome of the call.</returns>
         private async Task<Either<Error, FileResponse>> ProcessHttpCallForFileAsync(
             Func<HttpClient, Task<HttpResponseMessage>> httpCall,
@@ -176,25 +174,26 @@ namespace Us.Proxy.Common
             });
 
         protected virtual async Task<HttpResponseMessage> Send(Func<HttpClient, Task<HttpResponseMessage>> httpCall) =>
-            await httpCall(httpClient);
+            await httpCall(HttpClient);
 
         private HttpClient WriteIdentifierHeader(Guid? identifier) =>
             identifier != null
-                ? httpClient.ReplaceHeader(IdentifierHeader, identifier.Value.ToString())
-                : httpClient;
+                ? HttpClient.ReplaceHeader(IDENTIFIER_HEADER, identifier.Value.ToString())
+                : HttpClient;
 
-        private Task<Either<Error, R>> TryHttp<R>(Func<Task<Either<Error, R>>> operation) =>
-            TryHttp(log, errorSource, operation);
+        private Task<Either<Error, TR>> TryHttp<TR>(Func<Task<Either<Error, TR>>> operation) =>
+            TryHttp(log, ErrorSource, operation);
 
         /// <summary>
-        /// Wraps <paramref name="operation"/> lambda representing an HTTP call in a try/catch statement, returns <see cref="Either{L, R}"/> expected result <typeparamref name="R"/> 
+        /// Wraps <paramref name="operation"/> lambda representing an HTTP call in a try/catch statement, returns <see cref="Either{L, R}"/> expected result <typeparamref name="TR"/> 
         /// or in case of exception logs it, assigns failure <see cref="HttpStatusCode"/> and converts exception to return type of <see cref="Error"/>.
         /// </summary>
-        /// <typeparam name="R">Type returned by <paramref name="operation"/></typeparam>
+        /// <typeparam name="TR">Type returned by <paramref name="operation"/></typeparam>
         /// <param name="log">Logger instance.</param>
-        /// <param name="operation">Lambda producing <see cref="Either{L, R}"/> result of <typeparamref name="R"/> or error condition of <see cref="Error"/>.</param>
+        /// <param name="errorSource">A source of where to designate where an error occurs.</param>
+        /// <param name="operation">Lambda producing <see cref="Either{L, R}"/> result of <typeparamref name="TR"/> or error condition of <see cref="Error"/>.</param>
         /// <returns></returns>
-        public static async Task<Either<Error, R>> TryHttp<R>(ILogger log, ErrorSource errorSource, Func<Task<Either<Error, R>>> operation, Guid? identifier = null)
+        public static async Task<Either<Error, TR>> TryHttp<TR>(ILogger log, ErrorSource errorSource, Func<Task<Either<Error, TR>>> operation, Guid? identifier = null)
         {
             try
             {
@@ -235,8 +234,8 @@ namespace Us.Proxy.Common
 
         internal static Error ToError(ILogger log, ErrorSource errorSource, HttpResponseMessage response, string content)
         {
-            var method = response.RequestMessage.Method;
-            var url = response.RequestMessage.RequestUri.ToString();
+            var method = response.RequestMessage?.Method;
+            var url = response.RequestMessage?.RequestUri?.ToString();
             return ToError(log, errorSource, response.StatusCode, content, method, url);
         }
 
@@ -244,7 +243,7 @@ namespace Us.Proxy.Common
         /// Will log an error and create and return an instance of <see cref="ErrorResponse"/>.
         /// </summary>
         /// <param name="log">Logger instance.</param>
-        /// <param name="errorSource"><see cref="ErrorSource"/> enum value identifying proxy in case of error.</param>
+        /// <param name="errorSource"><see cref="Ochlocracy.Model.ErrorSource"/> enum value identifying proxy in case of error.</param>
         /// <param name="statusCode"><sse cref="HttpStatusCode"/> enum value associated with error response.</param>
         /// <param name="message">Error description or details.</param>
         /// <param name="method"><see cref="HttpMethod"/> that resulted in error response.</param>
@@ -281,12 +280,11 @@ namespace Us.Proxy.Common
         /// <summary>
         /// Overridable template method for providing individual proxy implementations with ability to convert their error representations to our internal <see cref="Error"/>.
         /// </summary>
-        /// <param name="errorSource"><see cref="ErrorSource"/> enum value identifying source of the error or warning.</param>
-        /// <param name="statusCode"><see cref="HttpStatusCode"/> enum value associated with the error or warning.
+        /// <param name="statusCode"><see cref="HttpStatusCode"/> enum value associated with the error or warning.</param>
         /// <param name="response"><see cref="HttpResponseMessage"/> associated with the error or warning. Its content will contain an error representation used by the downstream API.</param>
         /// <returns></returns>
         protected virtual Error MapError(HttpStatusCode statusCode, HttpResponseMessage response) =>
-            Error.Create(errorSource, response.StatusCode, string.Empty, ErrorType.Integrations, exception: null);
+            Error.Create(ErrorSource, response.StatusCode, string.Empty, ErrorType.Integrations, exception: null);
 
         /// <summary>
         /// Converts internal exceptions and error conditions to <see cref="Error"/>
@@ -307,7 +305,7 @@ namespace Us.Proxy.Common
         /// Logs a warning.
         /// </summary>
         /// <param name="log">Logger instance.</param>
-        /// <param name="errorSource"><see cref="ErrorSource"/> enum value identifying source of the error or warning.</param>
+        /// <param name="errorSource"><see cref="Ochlocracy.Model.ErrorSource"/> enum value identifying source of the error or warning.</param>
         /// <param name="response"><see cref="HttpResponseMessage"/> associated with the error or warning. If provided it will be used to extract HTTP call metadata.</param>
         /// <param name="message">Human-readable error or warning description or details.</param>
         /// <returns>Nothing</returns>
@@ -323,7 +321,7 @@ namespace Us.Proxy.Common
         /// Logs a warning or error based on <paramref name="statusCode"/>.
         /// </summary>
         /// <param name="log">Logger instance.</param>
-        /// <param name="errorSource"><see cref="ErrorSource"/> enum value identifying source of the error or warning.</param>
+        /// <param name="errorSource"><see cref="Ochlocracy.Model.ErrorSource"/> enum value identifying source of the error or warning.</param>
         /// <param name="statusCode"><sse cref="HttpStatusCode"/> enum value associated with the error or warning. Determines whether condition will be logged as error or warning.</param>
         /// <param name="response"><see cref="HttpResponseMessage"/> associated with the error or warning. If provided it will be used to extract HTTP call metadata.</param>
         /// <param name="ex"><see cref="Exception"/> associated with the error or warning.</param>
@@ -347,7 +345,7 @@ namespace Us.Proxy.Common
         /// Logs a warning or error based on <paramref name="statusCode"/>.
         /// </summary>
         /// <param name="log">Logger instance.</param>
-        /// <param name="errorSource"><see cref="ErrorSource"/> enum value identifying source of the error or warning.</param>
+        /// <param name="errorSource"><see cref="Ochlocracy.Model.ErrorSource"/> enum value identifying source of the error or warning.</param>
         /// <param name="statusCode"><sse cref="HttpStatusCode"/> enum value associated with the error or warning. Determines whether condition will be logged as error or warning.</param>
         /// <param name="errorMessage">Human-readable error or warning description or details.</param>
         /// <param name="method">Type of Http method called</param>

@@ -37,9 +37,9 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
     .Enrich.WithThreadName()
     .Enrich.WithThreadId()
-    .WriteTo.Conditional(e => logger.Console.Enabled, c => c.Async(c => c.Console(restrictedToMinimumLevel: Level(logger.Console.MinimumLevel))))
+    .WriteTo.Conditional(_ => logger.Console.Enabled, c => c.Async(lsc => lsc.Console(restrictedToMinimumLevel: Level(logger.Console.MinimumLevel))))
     .CreateLogger();
-AppDomain.CurrentDomain.ProcessExit += (s, e) => Log.CloseAndFlush();
+AppDomain.CurrentDomain.ProcessExit += (_, _) => Log.CloseAndFlush();
 
 builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
 builder.Logging.AddSerilog();
@@ -86,11 +86,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy("default", policy =>
     {
         var corsOrigins = configuration.GetSection("AllowedHosts")
-        .AsEnumerable().Where(s => !string.IsNullOrEmpty(s.Value)).Select(s => s.Value!);
+            .AsEnumerable().Where(s => !string.IsNullOrEmpty(s.Value)).Select(s => s.Value!).ToArray();
 
-        if (corsOrigins.Any())
+        if (corsOrigins.Length != 0)
         {
-            policy.WithOrigins(corsOrigins.ToArray())
+            policy.WithOrigins(corsOrigins)
                 .SetIsOriginAllowedToAllowWildcardSubdomains()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
@@ -184,10 +184,10 @@ app.UseAuthorization();
 app.MapControllers();
 app.Run();
 
-void ConfigureContainer(ContainerBuilder builder)
+void ConfigureContainer(ContainerBuilder containerBuilder)
 {
-    builder.RegisterInstance(application);
-    builder.RegisterInstance(Log.Logger);
+    containerBuilder.RegisterInstance(application);
+    containerBuilder.RegisterInstance(Log.Logger);
 }
 
 /// <summary>
@@ -218,7 +218,7 @@ public partial class Program
         Serilog.ILogger logger,
         ErrorSource errorSource)
     {
-        options.IncludeExceptionDetails = (ctx, exception) =>
+        options.IncludeExceptionDetails = (_, exception) =>
         {
             logger.Error("Exception thrown while processing... ExceptionTime: {DateTime}, Application: {Application}, " +
                 "ExceptionType: {Type}, ExceptionMessage: {Message}, StackTrace: {StackTrace}",

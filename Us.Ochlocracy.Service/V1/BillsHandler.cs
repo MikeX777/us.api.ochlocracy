@@ -46,8 +46,8 @@ namespace Us.Ochlocracy.Service.V1
         IRequestHandler<GetCongressPagedBillsByType, Either<ApiProblemDetails, BillPartialResponse>>,
         IRequestHandler<GetBillDetail, Either<ApiProblemDetails, BillResponse>>
     {
-        IBillProxy bills;
-        IAppCache cache;
+        readonly IBillProxy bills;
+        private IAppCache cache;
 
         public BillsHandler(IBillProxy bills, IAppCache cache) =>
             (this.bills, this.cache) = (bills, cache);

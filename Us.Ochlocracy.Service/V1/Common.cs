@@ -7,8 +7,8 @@ namespace Us.Ochlocracy.Service.V1
 {
     public static class Common
     {
-        const string GENERIC_ERROR_TITLE = "Error(s) processing request";
-        const string INTERNAL_SERVER_ERROR_TITLE = "Internal Server Error";
+        private const string GENERIC_ERROR_TITLE = "Error(s) processing request";
+        private const string INTERNAL_SERVER_ERROR_TITLE = "Internal Server Error";
 
         /// <summary>
         /// A static method to convert an <see cref="Error"/> to an <see cref="ApiProblemDetails"/>.
@@ -40,12 +40,12 @@ namespace Us.Ochlocracy.Service.V1
         /// <summary>
         /// A method used to handle an either and map the left value to <see cref="ApiProblemDetails"/>.
         /// </summary>
-        /// <typeparam name="R">The right return type.</typeparam>
+        /// <typeparam name="TR">The right return type.</typeparam>
         /// <param name="f">The method to run and map the return of.</param>
         /// <param name="origination">The origination of the error, used to describe where it occurred in the API.</param>
         /// <param name="errorResolver">An error code mapper that maps the error message to the a <see cref="ErrorCode"/>.</param>
         /// <returns>An <see cref="ApiProblemDetails"/>.</returns>
-        public static Either<ApiProblemDetails, R> MapLeft<R>(Func<Either<Error, R>> f,
+        public static Either<ApiProblemDetails, TR> MapLeft<TR>(Func<Either<Error, TR>> f,
             ApiProblemDetailsOrigination origination = ApiProblemDetailsOrigination.Unspecified,
             Func<string, ErrorCode>? errorResolver = null) =>
             f().MapLeft(e => e.ToProblemDetails(origination, errorResolver));
@@ -53,12 +53,12 @@ namespace Us.Ochlocracy.Service.V1
         /// <summary>
         /// An asynchronous method used to handle an either and map the left value to <see cref="ApiProblemDetails"/>.
         /// </summary>
-        /// <typeparam name="R">The right return type.</typeparam>
+        /// <typeparam name="TR">The right return type.</typeparam>
         /// <param name="f">The method to run and map the return of.</param>
         /// <param name="origination">The origination of the error, used to describe where it occurred in the API.</param>
         /// <param name="errorResolver">An error code mapper that maps the error message to the <see cref="ErrorCode"/>.</param>
         /// <returns>An <see cref="ApiProblemDetails"/>.</returns>
-        public static async Task<Either<ApiProblemDetails, R>> MapLeft<R>(Func<Task<Either<Error, R>>> f,
+        public static async Task<Either<ApiProblemDetails, TR>> MapLeft<TR>(Func<Task<Either<Error, TR>>> f,
             ApiProblemDetailsOrigination origination = ApiProblemDetailsOrigination.Unspecified,
             Func<string, ErrorCode>? errorResolver = null) =>
             (await f()).MapLeft(er => er.ToProblemDetails(origination, errorResolver));
