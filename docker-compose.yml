@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+
+  api:
+    container_name: "us.api.ochlocracy"
+    image: "us.api.ochlocracy"
+    build:
+      context: .
+      dockerfile: ./Us.Api.Ochlocracy/Dockerfile
+    depends_on:
+      - "db"
+    networks:
+      - db
+    ports:
+      - "8000:8080"
+
+networks:
+  db:
+    driver: bridge
