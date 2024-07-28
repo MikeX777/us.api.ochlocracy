@@ -2,8 +2,14 @@ services:
   db:
     image: postgres
     restart: always
+    ports: 
+      - "8005:5432"
+    volumes:
+      - ./data/scripts/:/docker-entrypoint-initdb.d/
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+#    command: sh -c "psql -p 8005 -U postgres postgres < /tmp/seed.sql"
 
   api:
     container_name: "us.api.ochlocracy"
