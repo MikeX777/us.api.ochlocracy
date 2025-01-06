@@ -40,5 +40,5 @@ bld/
 [Oo]ut/
 msbuild.log
 msbuild.err
-msbuild.wrn
+msbuild.wrnriver/
 Driver/

@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Us.Ochlocracy.Service", "Us
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Us.Ochlocracy.Data", "Us.Ochlocracy.Data\Us.Ochlocracy.Data.csproj", "{477622AE-E1DF-4092-9708-6551ED804BD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Us.Ochlocracy.Interfaces", "Us.Ochlocracy.Interfaces\Us.Ochlocracy.Interfaces.csproj", "{1665B3B1-21C9-411E-9236-476057226766}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{477622AE-E1DF-4092-9708-6551ED804BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{477622AE-E1DF-4092-9708-6551ED804BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{477622AE-E1DF-4092-9708-6551ED804BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1665B3B1-21C9-411E-9236-476057226766}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1665B3B1-21C9-411E-9236-476057226766}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1665B3B1-21C9-411E-9236-476057226766}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1665B3B1-21C9-411E-9236-476057226766}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

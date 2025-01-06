@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Us.Congress.Proxy\Us.Congress.Proxy.csproj" />
+    <ProjectReference Include="..\Us.Ochlocracy.Data\Us.Ochlocracy.Data.csproj" />
     <ProjectReference Include="..\Us.Ochlocracy.Model\Us.Ochlocracy.Model.csproj" />
   </ItemGroup>
 
