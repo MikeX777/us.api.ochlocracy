@@ -11,13 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Us.Congress.Proxy", "Us.Con
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Us.Proxy.Common", "Us.Proxy.Common\Us.Proxy.Common.csproj", "{30DE1CD5-D722-43F8-824B-836FAD9BF2B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Driver", "Driver\Driver.csproj", "{AD807B35-29E5-4506-B929-BAC5B60589AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Us.Ochlocracy.Service", "Us.Ochlocracy.Service\Us.Ochlocracy.Service.csproj", "{50DF4EBE-3B18-449D-8A1D-7B92D5B31484}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Us.Ochlocracy.Service", "Us.Ochlocracy.Service\Us.Ochlocracy.Service.csproj", "{50DF4EBE-3B18-449D-8A1D-7B92D5B31484}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Us.Ochlocracy.Data", "Us.Ochlocracy.Data\Us.Ochlocracy.Data.csproj", "{477622AE-E1DF-4092-9708-6551ED804BD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Us.Ochlocracy.Data", "Us.Ochlocracy.Data\Us.Ochlocracy.Data.csproj", "{477622AE-E1DF-4092-9708-6551ED804BD6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Us.Ochlocracy.Interfaces", "Us.Ochlocracy.Interfaces\Us.Ochlocracy.Interfaces.csproj", "{1665B3B1-21C9-411E-9236-476057226766}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Us.Ochlocracy.Interfaces", "Us.Ochlocracy.Interfaces\Us.Ochlocracy.Interfaces.csproj", "{1665B3B1-21C9-411E-9236-476057226766}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +39,6 @@ Global
 		{30DE1CD5-D722-43F8-824B-836FAD9BF2B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30DE1CD5-D722-43F8-824B-836FAD9BF2B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30DE1CD5-D722-43F8-824B-836FAD9BF2B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD807B35-29E5-4506-B929-BAC5B60589AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD807B35-29E5-4506-B929-BAC5B60589AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD807B35-29E5-4506-B929-BAC5B60589AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD807B35-29E5-4506-B929-BAC5B60589AE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{50DF4EBE-3B18-449D-8A1D-7B92D5B31484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{50DF4EBE-3B18-449D-8A1D-7B92D5B31484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50DF4EBE-3B18-449D-8A1D-7B92D5B31484}.Release|Any CPU.ActiveCfg = Release|Any CPU
