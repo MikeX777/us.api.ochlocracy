@@ -28,7 +28,7 @@ begin
 
   insert into bill_reactions (bill_number, user_id, explanation, opinion, score) values
     ('bill_number_1', u_id, 'explanation 1', 'opinion 1', 0),
-    ('bill_number_1', u_id, 'explanation 2', 'opinion 3', 0),
+    ('bill_number_1', u_id, 'explanation 2', 'opinion 2', 0),
     ('bill_number_1', u_id, 'explanation 3', 'opinion 3', 0),
     ('bill_number_2', u_id, 'explanation 2', 'opinion 2', 0);
 end 

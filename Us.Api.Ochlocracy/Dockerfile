@@ -33,4 +33,4 @@ RUN dotnet publish "./Us.Api.Ochlocracy.csproj" -c $BUILD_CONFIGURATION -o /app/
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Us.Api.Ochlocracy.dll"]
+ENTRYPOINT ["dotnet", "Us.Api.Ochlocracy.dll", "--environment=Development"]

@@ -1,5 +1,5 @@
 services:
-  db:
+  localdb:
     image: postgres
     restart: always
     ports: 
@@ -9,6 +9,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+    networks:
+      - backend
 #    command: sh -c "psql -p 8005 -U postgres postgres < /tmp/seed.sql"
 
   api:
@@ -18,12 +20,15 @@ services:
       context: .
       dockerfile: ./Us.Api.Ochlocracy/Dockerfile
     depends_on:
-      - "db"
+      - "localdb"
     networks:
-      - db
+      - backend
     ports:
-      - "8000:8080"
+      - "8080:8080"
 
 networks:
-  db:
+  backend:
+    name: us_api_backend
     driver: bridge
+
+
