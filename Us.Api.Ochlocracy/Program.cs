@@ -46,7 +46,6 @@ AppDomain.CurrentDomain.ProcessExit += (_, _) => Log.CloseAndFlush();
 
 builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
 builder.Logging.AddSerilog();
-Log.Logger.Error(builder.Environment.EnvironmentName);
 
 builder.Services.AddLazyCache();
 builder.Services.AddMediatR(cfg =>
