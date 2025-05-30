@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Us.Api.Ochlocracy.Abstractions;
+using Us.Ochlocracy.Data.Entities;
 using Us.Ochlocracy.Model.Api;
 using Us.Ochlocracy.Service.V1;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -41,5 +42,22 @@ namespace Us.Api.Ochlocracy.Controllers.V1
         [ProducesResponseType(Status200OK, Type = typeof(IEnumerable<string>))]
         public async Task<IActionResult> GetDummy() =>
             Respond(await mediator.Send(new GetDummyValues()));
+
+        [HttpGet("billreaction")]
+        [SwaggerOperation("Dummy action to get bill reactions from a database.")]
+        [ProducesResponseType(Status200OK, Type = typeof(IEnumerable<BillReactionEntity>))]
+        public async Task<IActionResult> GetDummyBillReaction(
+            [FromQuery] string billNumber,
+            [FromQuery] int? highestScore) =>
+            Respond(await mediator.Send(new GetBillReactions(billNumber, highestScore)));
+        
+        [HttpGet("user")]
+        [SwaggerOperation("Dummy action to get users from a database.")]
+        [ProducesResponseType(Status200OK, Type = typeof(IEnumerable<BillReactionEntity>))]
+        public async Task<IActionResult> GetDummyUsers(
+            [FromQuery] string username) =>
+            Respond(await mediator.Send(new GetUser(username)));
+        
+        
     }
 }

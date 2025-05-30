@@ -1,0 +1,34 @@
+services:
+  localdb:
+    image: postgres
+    restart: always
+    ports: 
+      - "8005:5432"
+    volumes:
+      - ./data/scripts/:/docker-entrypoint-initdb.d/
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    networks:
+      - backend
+#    command: sh -c "psql -p 8005 -U postgres postgres < /tmp/seed.sql"
+
+  api:
+    container_name: "us.api.ochlocracy"
+    image: "us.api.ochlocracy"
+    build:
+      context: .
+      dockerfile: ./Us.Api.Ochlocracy/Dockerfile
+    depends_on:
+      - "localdb"
+    networks:
+      - backend
+    ports:
+      - "8080:8080"
+
+networks:
+  backend:
+    name: us_api_backend
+    driver: bridge
+
+

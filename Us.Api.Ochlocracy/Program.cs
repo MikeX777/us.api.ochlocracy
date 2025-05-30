@@ -1,3 +1,4 @@
+using System.Data;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Autofac;
@@ -11,8 +12,10 @@ using Serilog.Events;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Npgsql;
 using Us.Api.Ochlocracy.Configuration;
 using Us.Api.Ochlocracy.Middleware;
+using Us.Ochlocracy.Data.Repositories;
 using Us.Ochlocracy.Model;
 using Us.Ochlocracy.Model.Api;
 using Us.Ochlocracy.Model.Exceptions;
@@ -22,7 +25,7 @@ using static LanguageExt.Prelude;
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = new ConfigurationBuilder()
-    .SetBasePath(builder.Environment.ContentRootPath)
+    .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables()
@@ -186,8 +189,14 @@ app.Run();
 
 void ConfigureContainer(ContainerBuilder containerBuilder)
 {
+    Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+    var connectionString = application.DefaultConnectionString;
     containerBuilder.RegisterInstance(application);
     containerBuilder.RegisterInstance(Log.Logger);
+    containerBuilder.Register((_, _) => new NpgsqlConnection(connectionString)).As<IDbConnection>()
+        .InstancePerLifetimeScope();
+    containerBuilder.Register<BillReactionRepository>((c, _) => new BillReactionRepository(c.Resolve<IDbConnection>()));
+    containerBuilder.Register<UserRepository>((c, _) => new UserRepository(c.Resolve<IDbConnection>()));
 }
 
 /// <summary>
