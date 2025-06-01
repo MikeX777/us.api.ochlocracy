@@ -16,6 +16,7 @@ using Npgsql;
 using Us.Api.Ochlocracy.Configuration;
 using Us.Api.Ochlocracy.Middleware;
 using Us.Ochlocracy.Data.Repositories;
+using Us.Ochlocracy.Interfaces.Repositories;
 using Us.Ochlocracy.Model;
 using Us.Ochlocracy.Model.Api;
 using Us.Ochlocracy.Model.Exceptions;
@@ -195,7 +196,7 @@ void ConfigureContainer(ContainerBuilder containerBuilder)
     containerBuilder.RegisterInstance(Log.Logger);
     containerBuilder.Register((_, _) => new NpgsqlConnection(connectionString)).As<IDbConnection>()
         .InstancePerLifetimeScope();
-    containerBuilder.Register<BillReactionRepository>((c, _) => new BillReactionRepository(c.Resolve<IDbConnection>()));
+    containerBuilder.Register<IBillReactionRepository>((c, _) => new BillReactionRepository(c.Resolve<IDbConnection>()));
     containerBuilder.Register<UserRepository>((c, _) => new UserRepository(c.Resolve<IDbConnection>()));
 }
 

@@ -43,6 +43,12 @@ namespace Us.Api.Ochlocracy.Controllers.V1
         public async Task<IActionResult> GetDummy() =>
             Respond(await mediator.Send(new GetDummyValues()));
 
+        /// <summary>
+        /// Dummy endpoint to get bill reactions.
+        /// </summary>
+        /// <param name="billNumber"></param>
+        /// <param name="highestScore"></param>
+        /// <returns></returns>
         [HttpGet("billreaction")]
         [SwaggerOperation("Dummy action to get bill reactions from a database.")]
         [ProducesResponseType(Status200OK, Type = typeof(IEnumerable<BillReactionEntity>))]
@@ -51,6 +57,11 @@ namespace Us.Api.Ochlocracy.Controllers.V1
             [FromQuery] int? highestScore) =>
             Respond(await mediator.Send(new GetBillReactions(billNumber, highestScore)));
         
+        /// <summary>
+        /// Dummy endpoint to get users.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         [HttpGet("user")]
         [SwaggerOperation("Dummy action to get users from a database.")]
         [ProducesResponseType(Status200OK, Type = typeof(IEnumerable<BillReactionEntity>))]
