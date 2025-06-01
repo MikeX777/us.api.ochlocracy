@@ -65,5 +65,16 @@ public class BillReactionsController(IMediator mediator) : RespondController
     public async Task<IActionResult> UpdateBillReaction(
         [FromBody] UpdateBillReactionRequest request) =>
         Respond(await mediator.Send(new UpdateBillReaction(request)));
-
+    
+    /// <summary>
+    /// Endpoint to delete a bill reaction by the identifier.
+    /// </summary>
+    /// <param name="billReactionId">The identifier of the reaction to delete.</param>
+    /// <returns></returns>
+    [HttpDelete("{billReactionId}")]
+    [SwaggerOperation("Action to delete a specific bill reaction.")]
+    [ProducesResponseType(Status204NoContent)]
+    public async Task<IActionResult> DeleteBillReaction(
+        [FromRoute] long billReactionId) =>
+    Respond(await mediator.Send(new DeleteBillReaction(billReactionId)));
 }
