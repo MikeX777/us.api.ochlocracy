@@ -1,7 +1,7 @@
 using FluentValidation;
-using Us.Ochlocracy.Model.Api.Requests;
+using Us.Ochlocracy.Model.Api.Requests.Bills;
 
-namespace Us.Ochlocracy.Model.Api.Validators;
+namespace Us.Ochlocracy.Model.Api.Validators.Bills;
 
 public class CreateBillReactionRequestValidator : AbstractValidator<CreateBillReactionRequest>
 {

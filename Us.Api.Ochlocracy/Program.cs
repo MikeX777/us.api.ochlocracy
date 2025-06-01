@@ -19,7 +19,7 @@ using Us.Ochlocracy.Data.Repositories;
 using Us.Ochlocracy.Interfaces.Repositories;
 using Us.Ochlocracy.Model;
 using Us.Ochlocracy.Model.Api;
-using Us.Ochlocracy.Model.Api.Validators;
+using Us.Ochlocracy.Model.Api.Validators.Bills;
 using Us.Ochlocracy.Model.Exceptions;
 using Us.Ochlocracy.Service.V1;
 using static LanguageExt.Prelude;

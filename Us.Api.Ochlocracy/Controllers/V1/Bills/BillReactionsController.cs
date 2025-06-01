@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using Us.Api.Ochlocracy.Abstractions;
 using Us.Ochlocracy.Data.Entities;
 using Us.Ochlocracy.Model.Api;
-using Us.Ochlocracy.Model.Api.Requests;
+using Us.Ochlocracy.Model.Api.Requests.Bills;
 using Us.Ochlocracy.Service.V1;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
@@ -53,5 +53,17 @@ public class BillReactionsController(IMediator mediator) : RespondController
     public async Task<IActionResult> CreateBillReaction(
         [FromBody] CreateBillReactionRequest request) =>
     Respond(await mediator.Send(new CreateBillReaction(request)));
+
+    /// <summary>
+    /// Endpoint to update an existing Bill Reaction.
+    /// </summary>
+    /// <param name="request">The request object containing the data to update a bill reaction.</param>
+    /// <returns></returns>
+    [HttpPut()]
+    [SwaggerOperation("Action to update a specific bill reaction.")]
+    [ProducesResponseType(Status204NoContent)]
+    public async Task<IActionResult> UpdateBillReaction(
+        [FromBody] UpdateBillReactionRequest request) =>
+        Respond(await mediator.Send(new UpdateBillReaction(request)));
 
 }

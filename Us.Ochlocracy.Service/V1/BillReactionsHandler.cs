@@ -4,7 +4,7 @@ using Us.Ochlocracy.Data.Entities;
 using Us.Ochlocracy.Data.Repositories;
 using Us.Ochlocracy.Interfaces.Repositories;
 using Us.Ochlocracy.Model.Api;
-using Us.Ochlocracy.Model.Api.Requests;
+using Us.Ochlocracy.Model.Api.Requests.Bills;
 using Us.Ochlocracy.Model.Bills;
 using Unit = LanguageExt.Unit;
 
@@ -24,8 +24,8 @@ public record CreateBillReaction(CreateBillReactionRequest Request) : IRequest<E
 /// <summary>
 /// A command to update an existing bill reaction.
 /// </summary>
-/// <param name="BillReaction">The data used to update a bill reaction.</param>
-public record UpdateBillReaction(BillReaction BillReaction) : IRequest<Either<ApiProblemDetails, Unit>> { }
+/// <param name="Request">The data used to update a bill reaction.</param>
+public record UpdateBillReaction(UpdateBillReactionRequest Request) : IRequest<Either<ApiProblemDetails, Unit>> { }
 /// <summary>
 /// A command to update the score of a bill reaction.`
 /// </summary>
@@ -58,21 +58,24 @@ public class BillReactionsHandler(IBillReactionRepository billReactions, UserRep
             select br
             );
     
-    public async Task<Either<ApiProblemDetails, Unit>> Handle(CreateBillReaction request,
+    public async Task<Either<ApiProblemDetails, Unit>> Handle(CreateBillReaction command,
         CancellationToken cancellationToken) =>
         await (
             from _ in Common.MapLeft(() => billReactions.CreateBillReaction(
-                request.Request.BillNumber,
-                request.Request.UserId,
-                request.Request.Explanation,
-                request.Request.Opinion)).ToAsync()
+                command.Request.BillNumber,
+                command.Request.UserId,
+                command.Request.Explanation,
+                command.Request.Opinion)).ToAsync()
             select Unit.Default
         );
 
-    public async Task<Either<ApiProblemDetails, Unit>> Handle(UpdateBillReaction request,
+    public async Task<Either<ApiProblemDetails, Unit>> Handle(UpdateBillReaction command,
         CancellationToken cancellationToken) =>
         await (
-            from _ in Common.MapLeft(() => billReactions.UpdateBillReaction(request.BillReaction)).ToAsync()
+            from _ in Common.MapLeft(() => billReactions.UpdateBillReaction(
+                command.Request.BillReactionId,
+                command.Request.Explanation,
+                command.Request.Opinion)).ToAsync()
             select Unit.Default
         );
 

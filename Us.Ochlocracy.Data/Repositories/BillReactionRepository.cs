@@ -46,20 +46,20 @@ public class BillReactionRepository(IDbConnection connection) : IBillReactionRep
             },
             mapError: (ex) => Error.Create(ErrorSource.BillReactionRepository, HttpStatusCode.InternalServerError, ex.Message));
 
-    public async Task<Either<Error, Unit>> UpdateBillReaction(BillReaction billReaction) =>
+    public async Task<Either<Error, Unit>> UpdateBillReaction(long billReactionId, string explanation, string opinion) =>
         await BaseRepository.TryFuncCatchExceptionAsync(
             async () =>
             {
                 await connection.ExecuteAsync(
                     """
-                    UPDATE bill_reactions br
-                    SET br.explanation = @explanation, br.opinion = @opinion
-                    WHERE br.bill_reaction_id = @billReactionId;
+                    UPDATE bill_reactions
+                    SET explanation = @explanation, opinion = @opinion
+                    WHERE bill_reaction_id = @billReactionId;
                     """, new
                     {
-                        billReaction = billReaction.BillReactionId,
-                        explanation = billReaction.Explanation,
-                        opinion = billReaction.Opinion,
+                        billReactionId = billReactionId,
+                        explanation = explanation,
+                        opinion = opinion,
                     });
                 return Unit.Default;
             }, 

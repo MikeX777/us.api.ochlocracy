@@ -1,4 +1,4 @@
-namespace Us.Ochlocracy.Model.Api.Requests;
+namespace Us.Ochlocracy.Model.Api.Requests.Bills;
 
 public class CreateBillReactionRequest
 {
