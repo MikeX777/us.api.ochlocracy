@@ -27,7 +27,7 @@ public class BillReactionRepository(IDbConnection connection) : IBillReactionRep
             }),
             mapError: (ex) => Error.Create(ErrorSource.BillReactionRepository, HttpStatusCode.InternalServerError, ex.Message));
     
-    public async Task<Either<Error, Unit>> CreateBillReaction(BillReaction billReaction) =>
+    public async Task<Either<Error, Unit>> CreateBillReaction(string billNumber, int userId, string explanation, string opinion) =>
         await BaseRepository.TryFuncCatchExceptionAsync(
             async () =>
             {
@@ -37,10 +37,10 @@ public class BillReactionRepository(IDbConnection connection) : IBillReactionRep
                     VALUES (@billNumber, @userId, @explanation, @opinion, 1);
                     """, new
                     {
-                        billNumber = billReaction.BillNumber,
-                        userId = billReaction.UserId,
-                        explanation = billReaction.Explanation,
-                        opinion = billReaction.Opinion,
+                        billNumber = billNumber,
+                        userId = userId,
+                        explanation = explanation,
+                        opinion = opinion,
                     });
                 return Unit.Default;
             },

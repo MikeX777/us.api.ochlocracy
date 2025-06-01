@@ -19,6 +19,7 @@ using Us.Ochlocracy.Data.Repositories;
 using Us.Ochlocracy.Interfaces.Repositories;
 using Us.Ochlocracy.Model;
 using Us.Ochlocracy.Model.Api;
+using Us.Ochlocracy.Model.Api.Validators;
 using Us.Ochlocracy.Model.Exceptions;
 using Us.Ochlocracy.Service.V1;
 using static LanguageExt.Prelude;
@@ -63,7 +64,10 @@ builder.Services
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly(),]);
+builder.Services.AddValidatorsFromAssemblies([
+    Assembly.GetExecutingAssembly(),
+    typeof(CreateBillReactionRequestValidator).Assembly,
+]);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApiVersioning(
     options =>

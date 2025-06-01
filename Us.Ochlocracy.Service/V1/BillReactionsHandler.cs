@@ -4,6 +4,7 @@ using Us.Ochlocracy.Data.Entities;
 using Us.Ochlocracy.Data.Repositories;
 using Us.Ochlocracy.Interfaces.Repositories;
 using Us.Ochlocracy.Model.Api;
+using Us.Ochlocracy.Model.Api.Requests;
 using Us.Ochlocracy.Model.Bills;
 using Unit = LanguageExt.Unit;
 
@@ -18,8 +19,8 @@ public record GetBillReactions(string BillNumber, int? HighestScore) : IRequest<
 /// <summary>
 /// A command to create a reaction to a bill.
 /// </summary>
-/// <param name="BillReaction">The model containing the data for creating a bill reaction.</param>
-public record CreateBillReaction(BillReaction BillReaction) : IRequest<Either<ApiProblemDetails, Unit>> { }
+/// <param name="Request">The model containing the data for creating a bill reaction.</param>
+public record CreateBillReaction(CreateBillReactionRequest Request) : IRequest<Either<ApiProblemDetails, Unit>> { }
 /// <summary>
 /// A command to update an existing bill reaction.
 /// </summary>
@@ -50,8 +51,6 @@ public class BillReactionsHandler(IBillReactionRepository billReactions, UserRep
         IRequestHandler<UpdateBillReactionScore, Either<ApiProblemDetails, Unit>>,
         IRequestHandler<DeleteBillReaction, Either<ApiProblemDetails, Unit>>
 {
-    private readonly UserRepository users = users;
-
     public async Task<Either<ApiProblemDetails, IEnumerable<BillReaction>>> Handle(GetBillReactions request,
         CancellationToken cancellationToken) =>
         await (
@@ -62,7 +61,11 @@ public class BillReactionsHandler(IBillReactionRepository billReactions, UserRep
     public async Task<Either<ApiProblemDetails, Unit>> Handle(CreateBillReaction request,
         CancellationToken cancellationToken) =>
         await (
-            from _ in Common.MapLeft(() => billReactions.CreateBillReaction(request.BillReaction)).ToAsync()
+            from _ in Common.MapLeft(() => billReactions.CreateBillReaction(
+                request.Request.BillNumber,
+                request.Request.UserId,
+                request.Request.Explanation,
+                request.Request.Opinion)).ToAsync()
             select Unit.Default
         );
 

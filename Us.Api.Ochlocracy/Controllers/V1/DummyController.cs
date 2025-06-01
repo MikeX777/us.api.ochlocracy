@@ -30,9 +30,6 @@ namespace Us.Api.Ochlocracy.Controllers.V1
     [Produces("application/json")]
     public class DummyController(IMediator mediator) : RespondController
     {
-        private readonly IMediator mediator = mediator;
-
-
         /// <summary>
         /// A general dummy GET request to the <see cref="DummyController"/>.
         /// </summary>
