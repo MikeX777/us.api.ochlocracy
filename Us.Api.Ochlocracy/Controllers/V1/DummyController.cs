@@ -52,7 +52,7 @@ namespace Us.Api.Ochlocracy.Controllers.V1
         public async Task<IActionResult> GetDummyBillReaction(
             [FromQuery] string billNumber,
             [FromQuery] int? highestScore) =>
-            Respond(await mediator.Send(new GetBillReactions(billNumber, highestScore)));
+            Respond(await mediator.Send(new GetBillOpinions(billNumber, highestScore)));
         
         /// <summary>
         /// Dummy endpoint to get users.

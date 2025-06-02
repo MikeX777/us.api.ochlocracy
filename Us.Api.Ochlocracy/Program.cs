@@ -66,7 +66,7 @@ builder.Services
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblies([
     Assembly.GetExecutingAssembly(),
-    typeof(CreateBillReactionRequestValidator).Assembly,
+    typeof(CreateBillExplanationRequestValidator).Assembly,
 ]);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApiVersioning(
@@ -200,7 +200,8 @@ void ConfigureContainer(ContainerBuilder containerBuilder)
     containerBuilder.RegisterInstance(Log.Logger);
     containerBuilder.Register((_, _) => new NpgsqlConnection(connectionString)).As<IDbConnection>()
         .InstancePerLifetimeScope();
-    containerBuilder.Register<IBillReactionRepository>((c, _) => new BillReactionRepository(c.Resolve<IDbConnection>()));
+    containerBuilder.Register<IBillExplanationRepository>((c, _) => new BillExplanationRepository(c.Resolve<IDbConnection>()));
+    containerBuilder.Register<IBillOpinionRepository>((c, _) => new BillOpinionRepository(c.Resolve<IDbConnection>()));
     containerBuilder.Register<UserRepository>((c, _) => new UserRepository(c.Resolve<IDbConnection>()));
 }
 
