@@ -26,6 +26,6 @@ public class UserRepository : IUserRepository
                 {
                     username = username
                 })).FirstOrDefault(),
-        mapError: (ex) => Error.Create(ErrorSource.BillReactionRepository, HttpStatusCode.InternalServerError, ex.Message));
+        mapError: (ex) => Error.Create(ErrorSource.BillExplanationRepository, HttpStatusCode.InternalServerError, ex.Message));
 }
 

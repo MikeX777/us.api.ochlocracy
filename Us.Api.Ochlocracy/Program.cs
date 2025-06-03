@@ -16,8 +16,10 @@ using Npgsql;
 using Us.Api.Ochlocracy.Configuration;
 using Us.Api.Ochlocracy.Middleware;
 using Us.Ochlocracy.Data.Repositories;
+using Us.Ochlocracy.Interfaces.Repositories;
 using Us.Ochlocracy.Model;
 using Us.Ochlocracy.Model.Api;
+using Us.Ochlocracy.Model.Api.Validators.Bills;
 using Us.Ochlocracy.Model.Exceptions;
 using Us.Ochlocracy.Service.V1;
 using static LanguageExt.Prelude;
@@ -62,7 +64,10 @@ builder.Services
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly(),]);
+builder.Services.AddValidatorsFromAssemblies([
+    Assembly.GetExecutingAssembly(),
+    typeof(CreateBillExplanationRequestValidator).Assembly,
+]);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApiVersioning(
     options =>
@@ -195,7 +200,8 @@ void ConfigureContainer(ContainerBuilder containerBuilder)
     containerBuilder.RegisterInstance(Log.Logger);
     containerBuilder.Register((_, _) => new NpgsqlConnection(connectionString)).As<IDbConnection>()
         .InstancePerLifetimeScope();
-    containerBuilder.Register<BillReactionRepository>((c, _) => new BillReactionRepository(c.Resolve<IDbConnection>()));
+    containerBuilder.Register<IBillExplanationRepository>((c, _) => new BillExplanationRepository(c.Resolve<IDbConnection>()));
+    containerBuilder.Register<IBillOpinionRepository>((c, _) => new BillOpinionRepository(c.Resolve<IDbConnection>()));
     containerBuilder.Register<UserRepository>((c, _) => new UserRepository(c.Resolve<IDbConnection>()));
 }
 

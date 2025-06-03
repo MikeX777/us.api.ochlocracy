@@ -106,9 +106,13 @@ namespace Us.Ochlocracy.Model
         /// </summary>
         OchlocracyAPI,
         /// <summary>
-        /// An error stemming from the Bill Reaction Repository. 
+        /// An error stemming from the Bill Explanation Repository. 
         /// </summary>
-        BillReactionRepository,
+        BillExplanationRepository,
+        /// <summary>
+        /// An error stemming from the Bill Opinion Repository. 
+        /// </summary>
+        BillOpinionRepository,
         /// <summary>
         /// An error stemming from the User Repository.
         /// </summary>

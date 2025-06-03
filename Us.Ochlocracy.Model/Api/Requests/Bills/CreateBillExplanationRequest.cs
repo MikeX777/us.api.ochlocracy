@@ -1,10 +1,8 @@
-﻿namespace Us.Ochlocracy.Model.Bills;
+namespace Us.Ochlocracy.Model.Api.Requests.Bills;
 
-public class BillReaction
+public class CreateBillExplanationRequest
 {
     public string BillNumber { get; set; } = string.Empty;
     public int UserId { get; set; }
     public string Explanation { get; set; } = string.Empty;
-    public string Opinion { get; set; } = string.Empty;
-    public int Score { get; set; }
 }

@@ -30,9 +30,6 @@ namespace Us.Api.Ochlocracy.Controllers.V1
     [Produces("application/json")]
     public class DummyController(IMediator mediator) : RespondController
     {
-        private readonly IMediator mediator = mediator;
-
-
         /// <summary>
         /// A general dummy GET request to the <see cref="DummyController"/>.
         /// </summary>
@@ -43,14 +40,25 @@ namespace Us.Api.Ochlocracy.Controllers.V1
         public async Task<IActionResult> GetDummy() =>
             Respond(await mediator.Send(new GetDummyValues()));
 
+        /// <summary>
+        /// Dummy endpoint to get bill reactions.
+        /// </summary>
+        /// <param name="billNumber"></param>
+        /// <param name="highestScore"></param>
+        /// <returns></returns>
         [HttpGet("billreaction")]
         [SwaggerOperation("Dummy action to get bill reactions from a database.")]
         [ProducesResponseType(Status200OK, Type = typeof(IEnumerable<BillReactionEntity>))]
         public async Task<IActionResult> GetDummyBillReaction(
             [FromQuery] string billNumber,
             [FromQuery] int? highestScore) =>
-            Respond(await mediator.Send(new GetBillReactions(billNumber, highestScore)));
+            Respond(await mediator.Send(new GetBillOpinions(billNumber, highestScore)));
         
+        /// <summary>
+        /// Dummy endpoint to get users.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         [HttpGet("user")]
         [SwaggerOperation("Dummy action to get users from a database.")]
         [ProducesResponseType(Status200OK, Type = typeof(IEnumerable<BillReactionEntity>))]
