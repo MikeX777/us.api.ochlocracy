@@ -15,5 +15,10 @@
         /// The connection string for the data base.
         /// </summary>
         public string DefaultConnectionString { get; set; } = configuration.GetConnectionString("default") ?? string.Empty;
+        
+        /// <summary>
+        /// The API Key for the Congress API
+        /// </summary>
+        public string CongressApiKey { get; set; } = configuration.GetSection("CongressApiKey")?.Value ?? string.Empty;
     }
 }

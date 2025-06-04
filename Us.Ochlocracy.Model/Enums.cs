@@ -20,7 +20,13 @@ namespace Us.Ochlocracy.Model
 
     public enum BillType
     {
-        HR,
+        S,
+        SRES,
         SCONRES,
+        SJRES,
+        HR,
+        HRES,
+        HCONRES,
+        HJRES,
     }
 }

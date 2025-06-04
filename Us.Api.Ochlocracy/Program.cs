@@ -15,6 +15,7 @@ using System.Text.Json.Serialization;
 using Npgsql;
 using Us.Api.Ochlocracy.Configuration;
 using Us.Api.Ochlocracy.Middleware;
+using Us.Congress.Proxy.Bills;
 using Us.Ochlocracy.Data.Repositories;
 using Us.Ochlocracy.Interfaces.Repositories;
 using Us.Ochlocracy.Model;
@@ -22,6 +23,7 @@ using Us.Ochlocracy.Model.Api;
 using Us.Ochlocracy.Model.Api.Validators.Bills;
 using Us.Ochlocracy.Model.Exceptions;
 using Us.Ochlocracy.Service.V1;
+using Us.Ochlocracy.Service.V1.Validators;
 using static LanguageExt.Prelude;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +32,7 @@ var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddJsonFile("appsettings.secret.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables()
     .Build();
 
@@ -67,8 +70,13 @@ builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsi
 builder.Services.AddValidatorsFromAssemblies([
     Assembly.GetExecutingAssembly(),
     typeof(CreateBillExplanationRequestValidator).Assembly,
+    typeof(GetPagedBillsValidator).Assembly,
 ]);
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient("CongressApi", client =>
+{
+    client.BaseAddress = new Uri("https://api.congress.gov/v3");
+});
 builder.Services.AddApiVersioning(
     options =>
     {
@@ -203,6 +211,9 @@ void ConfigureContainer(ContainerBuilder containerBuilder)
     containerBuilder.Register<IBillExplanationRepository>((c, _) => new BillExplanationRepository(c.Resolve<IDbConnection>()));
     containerBuilder.Register<IBillOpinionRepository>((c, _) => new BillOpinionRepository(c.Resolve<IDbConnection>()));
     containerBuilder.Register<UserRepository>((c, _) => new UserRepository(c.Resolve<IDbConnection>()));
+
+    containerBuilder.Register<IBillProxy>((c, _) => new BillProxy(application.CongressApiKey,
+        c.Resolve<IHttpClientFactory>().CreateClient("CongressApi"), new NullHttpCallLogger(), Log.Logger));
 }
 
 /// <summary>

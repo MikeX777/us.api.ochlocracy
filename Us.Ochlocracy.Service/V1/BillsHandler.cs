@@ -40,19 +40,13 @@ namespace Us.Ochlocracy.Service.V1
     /// <summary>
     /// A handler to handle commands for the bills.
     /// </summary>
-    public class BillsHandler :
+    public class BillsHandler(IBillProxy bills) :
+    // public class BillsHandler(IBillProxy bills, IAppCache cache) :
         IRequestHandler<GetPagedBills, Either<ApiProblemDetails, BillPartialResponse>>,
         IRequestHandler<GetCongressPagedBills, Either<ApiProblemDetails, BillPartialResponse>>,
         IRequestHandler<GetCongressPagedBillsByType, Either<ApiProblemDetails, BillPartialResponse>>,
         IRequestHandler<GetBillDetail, Either<ApiProblemDetails, BillResponse>>
     {
-        readonly IBillProxy bills;
-        private IAppCache cache;
-
-        public BillsHandler(IBillProxy bills, IAppCache cache) =>
-            (this.bills, this.cache) = (bills, cache);
-
-
         /// <summary>
         /// Handler to get paged bills.
         /// </summary>
