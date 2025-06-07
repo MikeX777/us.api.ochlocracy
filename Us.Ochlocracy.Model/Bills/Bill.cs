@@ -1,125 +1,124 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Us.Ochlocracy.Model.Bills
 {
     public class Bill
     {
-        [JsonPropertyName("action")]
-        public Action Action { get; set; } = new();
-        [JsonPropertyName("amendments")]
+        [JsonProperty("actions")]
+        public ActionLink Action { get; set; } = new();
+        [JsonProperty("amendments")]
         public AmendmentLink Amendments { get; set; } = new();
-        [JsonPropertyName("cboCostEstimates")]
+        [JsonProperty("cboCostEstimates")]
         public IEnumerable<CboCostEstimate> CboCostEstimates { get; set; } = [];
-        [JsonPropertyName("committeeReports")]
+        [JsonProperty("committeeReports")]
         public IEnumerable<CommitteeReport> CommitteeReports { get; set; } = [];
-        [JsonPropertyName("committees")]
+        [JsonProperty("committees")]
         public Committee Committees { get; set; } = new();
-        [JsonPropertyName("congress")]
+        [JsonProperty("congress")]
         public int Congress { get; set; }
-        [JsonPropertyName("constitutionalAuthorityStatementText")]
+        [JsonProperty("constitutionalAuthorityStatementText")]
         public string ConstitutionalAuthorityStatementText { get; set; } = string.Empty;
-        [JsonPropertyName("cosponsors")]
+        [JsonProperty("cosponsors")]
         public Cosponsor Cosponsors { get; set; } = new();
-        [JsonPropertyName("introducedDate")]
+        [JsonProperty("introducedDate")]
         public DateTime IntroducedDate { get; set; }
-        [JsonPropertyName("latestAction")]
+        [JsonProperty("latestAction")]
         public Action LastAction { get; set; } = new();
-        [JsonPropertyName("laws")]
+        [JsonProperty("laws")]
         public IEnumerable<Law> Laws { get; set; } = [];
-        [JsonPropertyName("number")]
+        [JsonProperty("number")]
         public string Number { get; set; } = string.Empty;
-        [JsonPropertyName("originChamber")]
+        [JsonProperty("originChamber")]
         public Chamber OriginChamber { get; set; }
-        [JsonPropertyName("policyArea")]
+        [JsonProperty("policyArea")]
         public PolicyArea PolicyArea { get; set; } = new();
-        [JsonPropertyName("relatedBills")]
+        [JsonProperty("relatedBills")]
         public RelatedBill RelatedBills { get; set; } = new();
-        [JsonPropertyName("sponsors")]
+        [JsonProperty("sponsors")]
         public IEnumerable<Sponsor> Sponsors { get; set; } = [];
-        [JsonPropertyName("subjects")]
+        [JsonProperty("subjects")]
         public Subject Subjects { get; set; } = new();
-        [JsonPropertyName("summaries")]
+        [JsonProperty("summaries")]
         public Summary Summaries { get; set; } = new();
-        [JsonPropertyName("textVersions")]
+        [JsonProperty("textVersions")]
         public TextVersion TextVersions { get; set; } = new();
-        [JsonPropertyName("title")]
+        [JsonProperty("title")]
         public string Title { get; set; } = string.Empty;
-        [JsonPropertyName("titles")]
+        [JsonProperty("titles")]
         public Title Titles { get; set; } = new();
-        [JsonPropertyName("type")]
+        [JsonProperty("type")]
         public BillType Type { get; set; }
-        [JsonPropertyName("updateDate")]
+        [JsonProperty("updateDate")]
         public DateTime UpdateDate { get; set; }
-        [JsonPropertyName("updateDateIncludingText")]
+        [JsonProperty("updateDateIncludingText")]
         public DateTime UpdateDateIncludingText { get; set; }
 
     }
 
-
     public class CboCostEstimate
     {
-        [JsonPropertyName("description")]
+        [JsonProperty("description")]
         public string Description { get; set; } = string.Empty;
-        [JsonPropertyName("pubDate")]
+        [JsonProperty("pubDate")]
         public DateTime PubDate { get; set; }
-        [JsonPropertyName("title")]
+        [JsonProperty("title")]
         public string Title { get; set; } = string.Empty;
-        [JsonPropertyName("url")]
+        [JsonProperty("url")]
         public string Url { get; set; } = string.Empty;
     }
 
     public class CommitteeReport
     {
-        [JsonPropertyName("citation")]
+        [JsonProperty("citation")]
         public string Citation { get; set; } = string.Empty;
-        [JsonPropertyName("url")]
+        [JsonProperty("url")]
         public string Url { get; set; } = string.Empty;
     }
 
 
     public class Law
     {
-        [JsonPropertyName("number")]
+        [JsonProperty("number")]
         public string Number { get; set; } = string.Empty;
-        [JsonPropertyName("type")]
+        [JsonProperty("type")]
         public string Type { get; set; } = string.Empty;
     }
 
     public class PolicyArea
     {
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
     }
 
     public class Sponsor
     {
-        [JsonPropertyName("bioguidId")]
+        [JsonProperty("bioguideId")]
         public string BioguideId { get; set; } = string.Empty;
-        [JsonPropertyName("district")]
+        [JsonProperty("district")]
         public int District { get; set; }
-        [JsonPropertyName("firstName")]
+        [JsonProperty("firstName")]
         public string FirstName { get; set; } = string.Empty;
-        [JsonPropertyName("fullName")]
+        [JsonProperty("fullName")]
         public string FullName { get; set; } = string.Empty;
-        [JsonPropertyName("isByRequest")]
+        [JsonProperty("isByRequest")]
         public string IsByRequest { get; set; } = string.Empty; // TODO: Possibly make enum? "N"
-        [JsonPropertyName("lastName")]
+        [JsonProperty("lastName")]
         public string LastName { get; set; } = string.Empty;
-        [JsonPropertyName("middleName")]
+        [JsonProperty("middleName")]
         public string MiddleName { get; set; } = string.Empty;
-        [JsonPropertyName("party")]
+        [JsonProperty("party")]
         public string Party { get; set; } = string.Empty; // TODO: possibly make enum? "D"
-        [JsonPropertyName("state")]
+        [JsonProperty("state")]
         public string State { get; set; } = string.Empty; // TODO: possibly make enum? "NY"
-        [JsonPropertyName("url")]
+        [JsonProperty("url")]
         public string Url { get; set; } = string.Empty;
     }
 
     public class CountLink
     {
-        [JsonPropertyName("count")]
+        [JsonProperty("count")]
         public int Count { get; set; }
-        [JsonPropertyName("url")]
+        [JsonProperty("url")]
         public string Url { get; set; } = string.Empty;
     }
     public class ActionLink : CountLink { }
@@ -127,7 +126,7 @@ namespace Us.Ochlocracy.Model.Bills
     public class Committee : CountLink { }
     public class Cosponsor : CountLink
     {
-        [JsonPropertyName("countIncludingWithdrawnCosponsors")]
+        [JsonProperty("countIncludingWithdrawnCosponsors")]
         public int CountIncludingWithdrawnCosponsors { get; set; }
     }
     public class RelatedBill : CountLink { }

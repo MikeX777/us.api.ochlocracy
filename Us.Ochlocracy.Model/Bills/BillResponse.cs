@@ -1,10 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Us.Ochlocracy.Model.Bills
 {
     public class BillResponse
     {
-        [JsonPropertyName("bills")]
-        public IEnumerable<Bill> Bills { get; set; } = [];
+        [JsonProperty("bill")] public Bill Bill { get; set; } = new();
     }
 }

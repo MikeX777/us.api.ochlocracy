@@ -77,7 +77,6 @@ public class BillsController(IMediator mediator) : RespondController
         [FromQuery] int limit = 10) =>
         Respond(await mediator.Send(new GetCongressPagedBillsByType(congressId, billType, offset, limit)));
 
-    // TODO: Does not work currently, the model for the object being returned is incorrect
     /// <summary>
     /// Retrieves the bill detail using the congress number, bill type, and bill number.
     /// </summary>
@@ -85,13 +84,13 @@ public class BillsController(IMediator mediator) : RespondController
     /// <param name="billType">The type of bill to retrieve.</param>
     /// <param name="billNumber">The number used to identify the specific bill.</param>
     /// <returns></returns>
-//     [HttpGet("{congressId}/{billType}/{billNumber}")]
-//     [SwaggerOperation(
-//         "Retrieves the bill detail of the specified bill using the congress, bill type, and bill number.")]
-//     [ProducesResponseType(Status200OK, Type = typeof(BillResponse))]
-//     public async Task<IActionResult> RetrieveBillDetail(
-//         [FromRoute] int congressId,
-//         [FromRoute] BillType billType,
-//         [FromRoute] string billNumber) =>
-//         Respond(await mediator.Send(new GetBillDetail(congressId, billType, billNumber)));
+    [HttpGet("{congressId}/{billType}/{billNumber}")]
+    [SwaggerOperation(
+        "Retrieves the bill detail of the specified bill using the congress, bill type, and bill number.")]
+    [ProducesResponseType(Status200OK, Type = typeof(BillResponse))]
+    public async Task<IActionResult> RetrieveBillDetail(
+        [FromRoute] int congressId,
+        [FromRoute] BillType billType,
+        [FromRoute] string billNumber) =>
+        Respond(await mediator.Send(new GetBillDetail(congressId, billType, billNumber)));
 }
